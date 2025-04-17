@@ -3,10 +3,10 @@ name: Python CI
 on:
   push:
     branches:
-      - master  # or main, depending on your default branch name
+      - master  # or main
   pull_request:
     branches:
-      - master  # or main, depending on your default branch name
+      - master  # or main
 
 jobs:
   build:
@@ -25,7 +25,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'  # Change this to your desired Python version
+        python-version: '3.10'
 
     - name: Install dependencies
       run: |
@@ -37,10 +37,11 @@ jobs:
       run: |
         pytest --cov=app --cov-report=xml
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}  # This refers to the secret token stored in GitHub Secrets
+        token: ${{ secrets.CODECOV_TOKEN }}  # Make sure this is in your repo secrets
+        slug: abdullahbaqai/ci-cd            # username/repo format
         files: ./coverage.xml
         flags: unittests
         name: codecov-umbrella
