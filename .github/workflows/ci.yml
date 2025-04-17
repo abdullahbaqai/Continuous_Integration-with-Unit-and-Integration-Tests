@@ -3,10 +3,10 @@ name: Python CI
 on:
   push:
     branches:
-      - main  # or master, depending on your main branch name
+      - master  # or master, depending on your main branch name
   pull_request:
     branches:
-      - main  # or master, depending on your main branch name
+      - master  # or master, depending on your main branch name
 
 jobs:
   build:
