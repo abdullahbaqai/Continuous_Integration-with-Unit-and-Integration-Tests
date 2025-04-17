@@ -24,3 +24,23 @@ This project sets up a **Continuous Integration (CI)** pipeline that automatical
 
 ## 📂 Project Structure
 
+your-project/
+│
+├── .github/
+│   └── workflows/
+│       └── python-ci.yml        # ✅ GitHub Actions CI workflow
+│
+├── your_module/                 # ✅ Your actual Python package/module
+│   ├── __init__.py
+│   ├── main.py                  # Your main code
+│   └── utils.py                 # Additional utilities
+│
+├── tests/                       # ✅ Test directory
+│   ├── __init__.py
+│   ├── test_main.py             # Unit tests for main.py
+│   └── test_integration.py      # Optional integration tests
+│
+├── requirements.txt             # ✅ List of dependencies (e.g. pytest, selenium, etc.)
+├── pytest.ini                   # ✅ Pytest configuration (optional)
+├── README.md
+└── .gitignore
