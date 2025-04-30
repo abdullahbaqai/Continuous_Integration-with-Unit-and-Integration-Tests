@@ -1,10 +1,7 @@
-# test_app.py
-from app import add, subtract
+from app import app
 
-def test_add():
-    assert add(2, 3) == 5
-    assert add(-1, 1) == 0
-
-def test_subtract():
-    assert subtract(5, 2) == 3
-    assert subtract(10, 10) == 0
+def test_home():
+    tester = app.test_client()
+    response = tester.get('/')
+    assert response.status_code == 200
+    assert b"Hello" in response.data
