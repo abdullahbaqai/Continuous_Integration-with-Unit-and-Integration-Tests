@@ -2,11 +2,9 @@ name: Python CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
 
 jobs:
   build:
@@ -21,11 +19,21 @@ jobs:
       with:
         python-version: '3.10'
 
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
     - name: Install system dependencies (for Selenium tests)
       run: |
         sudo apt-get update
-        sudo apt-get install -y xvfb chromium-browser chromium-chromedriver
-        which chromium-browser
+        sudo apt-get install -y chromium-browser || sudo apt-get install -y chromium
+        sudo apt-get install -y chromium-chromedriver
+        export PATH=$PATH:/usr/lib/chromium-browser/
+        which chromium-browser || which chromium
         which chromedriver
 
     - name: Install Python dependencies
