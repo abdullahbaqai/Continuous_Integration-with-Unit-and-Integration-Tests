@@ -4,6 +4,7 @@ cffi==1.17.1
 colorama==0.4.6
 coverage==7.8.0
 exceptiongroup==1.2.2
+flask==3.0.3
 h11==0.14.0
 idna==3.10
 iniconfig==2.1.0
