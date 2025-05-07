@@ -1,8 +1,19 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+import time
 
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.binary_location = "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
+driver = webdriver.Chrome()  # or specify path to chromedriver
 
-driver = webdriver.Chrome(options=chrome_options)
+# Open your local Flask app
+driver.get("http://127.0.0.1:5000")
+
+# Wait to let the page load
+time.sleep(2)
+
+# Check if the expected heading exists
+heading = driver.find_element(By.TAG_NAME, "h1")
+assert "Welcome to Flask!" in heading.text
+
+print("Test Passed!")
+
+driver.quit()
