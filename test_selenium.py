@@ -1,28 +1,25 @@
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
 
-# Configure Chrome options for headless CI environments
+# Configure options
 options = Options()
-options.add_argument("--headless")  # Run in headless mode
-options.add_argument("--no-sandbox")  # Required for CI environments
-options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
-options.binary_location = "/usr/lib/chromium-browser/chromium-browser"  # Correct path for Chromium binary
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
-# Create WebDriver instance with configured options
+# Use environment variable
+options.binary_location = os.getenv("CHROME_BIN", "/usr/bin/chromium-browser")
+
+# Create WebDriver instance
 driver = webdriver.Chrome(options=options)
 
-# Open your local Flask app (Make sure this is accessible from the CI environment)
+# Run test
 driver.get("http://127.0.0.1:5000")
-
-# Wait to let the page load
 time.sleep(2)
-
-# Check if the expected heading exists
 heading = driver.find_element(By.TAG_NAME, "h1")
 assert "Welcome to Flask!" in heading.text
-
 print("Test Passed!")
-
 driver.quit()
