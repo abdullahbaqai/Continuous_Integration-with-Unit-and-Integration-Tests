@@ -27,24 +27,33 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: Install Chromium and ChromeDriver
+    - name: Install Google Chrome
       run: |
+        wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo apt-get update
-        sudo apt-get install -y chromium-browser chromium-chromedriver
-        sudo ln -s /usr/lib/chromium-browser/chromium-browser /usr/local/bin/google-chrome
-        sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
-        echo "CHROME_BIN=/usr/local/bin/google-chrome" >> $GITHUB_ENV
+        sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+        echo "CHROME_BIN=$(which google-chrome)" >> $GITHUB_ENV
+
+    - name: Install ChromeDriver
+      run: |
+        CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+        DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" \
+          | jq -r ".channels.Stable.version")
+        wget -q "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$DRIVER_VERSION/linux64/chromedriver-linux64.zip"
+        unzip chromedriver-linux64.zip
+        sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+        sudo chmod +x /usr/local/bin/chromedriver
 
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest pytest-cov selenium
+        pip install pytest pytest-cov selenium flask
 
     - name: Start Flask app in background
       run: |
         nohup python app.py &
-        sleep 5  # Allow the Flask app to start
+        sleep 5
 
     - name: Run tests with coverage
       run: |
