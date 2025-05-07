@@ -1,8 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 import time
 
-driver = webdriver.Chrome()  # or specify path to chromedriver
+# Configure Chrome options for headless CI environments
+options = Options()
+options.add_argument("--headless")  # Run in headless mode
+options.add_argument("--no-sandbox")  # Required for CI environments
+options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
+options.binary_location = "/usr/bin/google-chrome"  # Point to correct Chrome binary
+
+# Create WebDriver instance with configured options
+driver = webdriver.Chrome(options=options)
 
 # Open your local Flask app
 driver.get("http://127.0.0.1:5000")
