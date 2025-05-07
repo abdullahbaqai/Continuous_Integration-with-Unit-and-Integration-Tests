@@ -1,19 +1,17 @@
 import time
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Set up Chrome options and service
+# Set up Chrome options
 options = Options()
-# Remove headless mode to enable GUI
-# options.add_argument('--headless')  # Commented out to disable headless mode
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 
-# Initialize the WebDriver
-service = Service(ChromeDriverManager().install())
+# Automatically download and set up the appropriate chromedriver version
+service = Service(ChromeDriverManager().install())  # Automatically uses the correct version
 driver = webdriver.Chrome(service=service, options=options)
 
 # Test logic
