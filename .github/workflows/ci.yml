@@ -35,7 +35,10 @@ jobs:
       shell: bash
 
     - name: Set environment variables for Chrome
-      run: echo "CHROME_BIN=/usr/bin/google-chrome-stable" >> $GITHUB_ENV
+      run: |
+        echo "CHROME_BIN=/usr/bin/google-chrome-stable" >> $GITHUB_ENV
+        which google-chrome-stable
+        google-chrome-stable --version
 
     - name: Install Python dependencies
       run: |

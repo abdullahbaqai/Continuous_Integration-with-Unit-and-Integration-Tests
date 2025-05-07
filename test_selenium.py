@@ -10,10 +10,10 @@ options = Options()
 options.add_argument("--headless")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
-options.binary_location = os.getenv("CHROME_BIN", "/usr/bin/google-chrome")
+options.binary_location = '/usr/bin/google-chrome-stable'
 
 # Use system-installed ChromeDriver
-service = Service("/usr/bin/chromedriver")
+service = Service(ChromeDriverManager().install())
 
 # Create WebDriver instance
 driver = webdriver.Chrome(service=service, options=options)
