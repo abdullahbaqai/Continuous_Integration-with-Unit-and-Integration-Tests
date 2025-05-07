@@ -7,7 +7,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 # Set up Chrome options and service
 options = Options()
-options.add_argument('--headless')  # Run in headless mode
+# Remove headless mode to enable GUI
+# options.add_argument('--headless')  # Commented out to disable headless mode
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 
