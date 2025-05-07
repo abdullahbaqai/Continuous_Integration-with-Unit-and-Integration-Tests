@@ -27,14 +27,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: Install system dependencies (Google Chrome)
+    - name: Install system dependencies (for Selenium tests)
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget gnupg unzip
-        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        sudo apt-get install -y chromium-browser chromium-chromedriver
+        sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver || true
       shell: bash
 
     - name: Set environment variables for Chrome
@@ -48,7 +45,7 @@ jobs:
 
     - name: Run Flask app in background
       run: |
-        nohup python app.py &
+        nohup python app.py & 
         sleep 5  # wait for app to start
 
     - name: Run tests with coverage
