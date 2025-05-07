@@ -27,14 +27,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: Install system dependencies (for Selenium tests)
+    - name: Install Chromium and ChromeDriver
       run: |
         sudo apt-get update
-        sudo apt-get install -y chromium-browser || sudo apt-get install -y chromium
-        sudo apt-get install -y chromium-chromedriver
-        export PATH=$PATH:/usr/lib/chromium-browser/
-        which chromium-browser || which chromium
-        which chromedriver
+        sudo apt-get install -y chromium-browser chromium-chromedriver
+        sudo ln -s /usr/bin/chromedriver /usr/local/bin/chromedriver
+        sudo ln -s /usr/bin/chromium-browser /usr/local/bin/google-chrome
 
     - name: Install Python dependencies
       run: |
