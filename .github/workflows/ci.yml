@@ -33,6 +33,7 @@ jobs:
         sudo apt-get install -y chromium-browser chromium-chromedriver
         sudo ln -s /usr/lib/chromium-browser/chromium-browser /usr/local/bin/google-chrome
         sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
+        echo "CHROME_BIN=/usr/local/bin/google-chrome" >> $GITHUB_ENV
 
     - name: Install Python dependencies
       run: |
@@ -40,10 +41,13 @@ jobs:
         pip install -r requirements.txt
         pip install pytest pytest-cov selenium
 
+    - name: Start Flask app in background
+      run: |
+        nohup python app.py &
+        sleep 5  # Allow the Flask app to start
+
     - name: Run tests with coverage
       run: |
-        # Set the environment variable to specify the path to the chromium binary
-        export CHROME_BIN=/usr/lib/chromium-browser/chromium-browser
         xvfb-run pytest --cov=app --cov-report=xml
 
     - name: Upload coverage to Codecov
