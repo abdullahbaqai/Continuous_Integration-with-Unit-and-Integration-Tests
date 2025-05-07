@@ -30,16 +30,15 @@ jobs:
     - name: Install Google Chrome
       run: |
         wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo apt-get update
-        sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+        sudo apt install -y ./google-chrome-stable_current_amd64.deb
         echo "CHROME_BIN=$(which google-chrome)" >> $GITHUB_ENV
 
-    - name: Install ChromeDriver
+    - name: Install ChromeDriver (matching version)
       run: |
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
         DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" \
           | jq -r ".channels.Stable.version")
-        wget -q "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$DRIVER_VERSION/linux64/chromedriver-linux64.zip"
+        curl -O "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$DRIVER_VERSION/linux64/chromedriver-linux64.zip"
         unzip chromedriver-linux64.zip
         sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
         sudo chmod +x /usr/local/bin/chromedriver
@@ -50,7 +49,7 @@ jobs:
         pip install -r requirements.txt
         pip install pytest pytest-cov selenium flask
 
-    - name: Start Flask app in background
+    - name: Start Flask app (background)
       run: |
         nohup python app.py &
         sleep 5
