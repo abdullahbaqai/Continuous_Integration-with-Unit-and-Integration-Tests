@@ -30,12 +30,12 @@ jobs:
     - name: Install system dependencies (for Selenium tests)
       run: |
         sudo apt-get update
-        sudo apt-get install -y chromium-browser chromium-chromedriver
+        sudo apt-get install -y chromium-browser chromium-chromedriver google-chrome-stable
         sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver || true
       shell: bash
 
     - name: Set environment variables for Chrome
-      run: echo "CHROME_BIN=/usr/bin/google-chrome" >> $GITHUB_ENV
+      run: echo "CHROME_BIN=/usr/bin/google-chrome-stable" >> $GITHUB_ENV
 
     - name: Install Python dependencies
       run: |
