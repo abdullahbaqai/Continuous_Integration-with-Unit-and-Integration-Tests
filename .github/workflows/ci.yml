@@ -27,18 +27,23 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: Install system dependencies (for Selenium tests)
+    - name: Clear webdriver cache
+      run: rm -rf ~/.wdm
+
+    - name: Install system dependencies (Chrome & ChromeDriver)
       run: |
         sudo apt-get update
-        sudo apt-get install -y chromium-browser chromium-chromedriver google-chrome-stable
-        sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver || true
-      shell: bash
+        sudo apt-get install -y wget unzip
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
+        CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+        wget -O chromedriver.zip "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chromedriver-linux64.zip"
+        unzip chromedriver.zip
+        sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
+        sudo chmod +x /usr/bin/chromedriver
 
     - name: Set environment variables for Chrome
-      run: |
-        echo "CHROME_BIN=/usr/bin/google-chrome-stable" >> $GITHUB_ENV
-        which google-chrome-stable
-        google-chrome-stable --version
+      run: echo "CHROME_BIN=/usr/bin/google-chrome" >> $GITHUB_ENV
 
     - name: Install Python dependencies
       run: |
@@ -48,8 +53,8 @@ jobs:
 
     - name: Run Flask app in background
       run: |
-        nohup python app.py & 
-        sleep 5  # wait for app to start
+        nohup python app.py &
+        sleep 5
 
     - name: Run tests with coverage
       run: |
