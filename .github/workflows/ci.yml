@@ -31,8 +31,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y chromium-browser chromium-chromedriver
-        sudo ln -s /usr/bin/chromedriver /usr/local/bin/chromedriver
-        sudo ln -s /usr/bin/chromium-browser /usr/local/bin/google-chrome
+        sudo ln -s /usr/lib/chromium-browser/chromium-browser /usr/local/bin/google-chrome
+        sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
 
     - name: Install Python dependencies
       run: |
@@ -42,7 +42,8 @@ jobs:
 
     - name: Run tests with coverage
       run: |
-        # Run tests using xvfb to simulate a display for headless browsers
+        # Set the environment variable to specify the path to the chromium binary
+        export CHROME_BIN=/usr/lib/chromium-browser/chromium-browser
         xvfb-run pytest --cov=app --cov-report=xml
 
     - name: Upload coverage to Codecov

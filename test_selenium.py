@@ -8,12 +8,12 @@ options = Options()
 options.add_argument("--headless")  # Run in headless mode
 options.add_argument("--no-sandbox")  # Required for CI environments
 options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
-options.binary_location = "/usr/bin/google-chrome"  # Point to correct Chrome binary
+options.binary_location = "/usr/lib/chromium-browser/chromium-browser"  # Correct path for Chromium binary
 
 # Create WebDriver instance with configured options
 driver = webdriver.Chrome(options=options)
 
-# Open your local Flask app
+# Open your local Flask app (Make sure this is accessible from the CI environment)
 driver.get("http://127.0.0.1:5000")
 
 # Wait to let the page load
