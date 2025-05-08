@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Set up Chrome options
 options = Options()
@@ -13,15 +14,10 @@ options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--headless')  # Ensure Chrome runs headlessly
+options.add_argument('--remote-debugging-port=9222')  # Add remote debugging port
 
-# Use appropriate chromedriver path based on environment
-if os.getenv("GITHUB_ACTIONS"):
-    # In CI, use the pre-installed driver path
-    service = Service("/usr/bin/chromedriver")
-else:
-    # Local: use webdriver-manager
-    from webdriver_manager.chrome import ChromeDriverManager
-    service = Service(ChromeDriverManager().install())
+# Use webdriver-manager to install the correct version of ChromeDriver
+service = Service(ChromeDriverManager().install())
 
 # Start Chrome browser
 driver = webdriver.Chrome(service=service, options=options)
