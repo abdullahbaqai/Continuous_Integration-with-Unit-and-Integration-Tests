@@ -19,7 +19,7 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Cache pip
+    - name: Cache pip dependencies
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip
@@ -27,22 +27,22 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: Clear webdriver cache
+    - name: Clear webdriver-manager cache
       run: rm -rf ~/.wdm
 
-    - name: Install system dependencies (Chrome & ChromeDriver)
+    - name: Install Google Chrome & ChromeDriver (v124)
       run: |
         sudo apt-get update
         sudo apt-get install -y wget unzip
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
-        # Use a stable ChromeDriver version that matches Chrome 124
+
         wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/124.0.6367.91/linux64/chromedriver-linux64.zip
         unzip chromedriver-linux64.zip
         sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
         sudo chmod +x /usr/bin/chromedriver
 
-    - name: Set environment variables for Chrome
+    - name: Set CHROME_BIN environment variable
       run: echo "CHROME_BIN=/usr/bin/google-chrome" >> $GITHUB_ENV
 
     - name: Install Python dependencies
@@ -53,12 +53,11 @@ jobs:
 
     - name: Run Flask app in background
       run: |
-        nohup python app.py &
-        sleep 5
+        nohup python app.py > flask.log 2>&1 &
+        sleep 5  # Wait for server to start
 
     - name: Run tests with coverage
-      run: |
-        pytest --cov=app --cov-report=xml
+      run: pytest --cov=app --cov-report=xml
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
