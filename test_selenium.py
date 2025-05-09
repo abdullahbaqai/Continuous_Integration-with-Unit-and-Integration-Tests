@@ -1,26 +1,20 @@
-import os
-import time
 from selenium import webdriver
+import time
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-
-# For local development, use webdriver-manager to download compatible ChromeDriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Configure Chrome options
 options = Options()
-options.add_argument('--disable-gpu')
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--headless')  # Comment this line if you want to see the browser
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
-# Always use the executable returned by install() — not the folder
-chromedriver_path = ChromeDriverManager().install()
-service = Service(executable_path=chromedriver_path)
+# Force version match if necessary:
+driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager(version="124.0.6367.91").install()),
+    options=options
+)
 
-# Initialize Chrome WebDriver
-driver = webdriver.Chrome(service=service, options=options)
 
 # Test your app
 driver.get("http://127.0.0.1:5000")
