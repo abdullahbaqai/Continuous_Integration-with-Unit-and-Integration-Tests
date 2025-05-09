@@ -10,10 +10,11 @@ options = Options()
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--headless')  # Keep this for CI use
+options.add_argument('--headless')  # For CI use
 
-# Automatically download the correct ChromeDriver version
-service = Service(ChromeDriverManager().install())
+# Ensure the correct binary is used (not just any file in the folder)
+driver_path = ChromeDriverManager().install()
+service = Service(executable_path=driver_path)
 
 # Initialize WebDriver
 driver = webdriver.Chrome(service=service, options=options)
