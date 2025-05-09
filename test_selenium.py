@@ -1,4 +1,3 @@
-import os
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -11,21 +10,20 @@ options = Options()
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--headless')  # Enable for CI environments
+options.add_argument('--headless')  # Keep this for CI use
 
-# Use webdriver-manager to download the correct ChromeDriver version
+# Automatically download the correct ChromeDriver version
 service = Service(ChromeDriverManager().install())
 
-# Start Chrome browser
+# Initialize WebDriver
 driver = webdriver.Chrome(service=service, options=options)
 
-# Test logic
+# Run your test
 driver.get("http://127.0.0.1:5000")
 time.sleep(2)
 
-# Validate heading
 heading = driver.find_element(By.TAG_NAME, "h1")
 assert "Welcome to Flask!" in heading.text
-
 print("Test Passed!")
+
 driver.quit()
