@@ -24,9 +24,15 @@ This project sets up a **Continuous Integration (CI)** pipeline that automatical
 
 ci-cd/
 │
+
 ├── app/                    # Application code
+
 ├── test_app.py             # Unit tests
+
 ├── requirements.txt        # Python dependencies
+
 ├── .github/workflows/
+
 │   └── python-ci.yml       # CI workflow configuration
+
 └── coverage.xml            # Auto-generated coverage report
